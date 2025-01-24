@@ -118,3 +118,19 @@ https://start.spring.io/
 ## Lombok 사용 시 주의점
 해당 설정에서 Enable annotation processing을 켜야 정상동작한다. (인텔리제이 기준)
 ![img.png](src/main/resources/static/img.png)
+
+---
+
+## `@ServletComponentScan`
+서블릿을 직접 등록해서 사용
+
+`@WebServlet` : 서블릿 애노테이션
+
+name: 서블릿 이름
+
+urlPatterns: URL 매핑
+
+## HTTP 요청 로그를 보고 싶을 때
+`application.properties`에 `logging.level.org.apache.coyote.http11=trace` 추가 (운영서버에 이렇게 모든 요청 정보를 다 남기면 성능저하가 발생할 수 있기 때문에 개발 단계에서만 적용하는 게 좋다.)
+
+참고! 스프링 부트 3.2 이전은 `debug`, 이후는 `trace` 적용 
