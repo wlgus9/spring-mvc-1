@@ -201,5 +201,30 @@ private ObjectMapper objectMapper = new ObjectMapper(); // JSON 결과를 파싱
 
 ---
 
-
+## `HttpServletResponse`
+* HTTP 응답 메시지 생성
+  * HTTP 응답코드 지정
+  * 헤더 생성
+  * 바디 생성
+* 편의 기능 제공
+  ```
+  // Content-Type: text/plain;charset=utf-8
+  
+  response.setContentType("text/plain");
+  response.setCharacterEncoding("utf-8");
+  ```
+  ```
+  // Set-Cookie: myCookie=good; Max-Age=600;
+  // response.setHeader("Set-Cookie", "myCookie=good; Max-Age=600");
+  
+  Cookie cookie = new Cookie("myCookie", "good");
+  cookie.setMaxAge(600); // 600초
+  response.addCookie(cookie);
+  ```
+  ```
+  // response.setStatus(HttpServletResponse.SC_FOUND); // 302
+  // response.setHeader("Location", "/basic/hello-form.html");
+  
+  response.sendRedirect("/basic/hello-form.html");
+  ```
 
