@@ -134,3 +134,39 @@ urlPatterns: URL 매핑
 `application.properties`에 `logging.level.org.apache.coyote.http11=trace` 추가 (운영서버에 이렇게 모든 요청 정보를 다 남기면 성능저하가 발생할 수 있기 때문에 개발 단계에서만 적용하는 게 좋다.)
 
 참고! 스프링 부트 3.2 이전은 `debug`, 이후는 `trace` 적용 
+
+---
+
+## `HttpServletRequest`
+서블릿은 HTTP 요청 메세지를 파싱하고 그 결과를 `HttpServletRequest` 객체에 담아서 제공해 준다.
+
+이 외에도 여러 부가기능을 제공한다.
+
+임시 저장소 기능 (해당 HTTP 요청의 시작부터 끝날 때까지 유지되는 임시 저장소 기능)
+* 저장 : `request.setAttribute(name, value)`
+* 조회 : `request.getAttribute(name)`
+
+세션 관리 기능 `request.getSession(true)`
+* true : 세션이 있으면 기존 세션 반환, **없으면 새로 생성**
+  * `getSession()`과 `getSession(true)`은 동일하다!
+* false : 세션이 있으면 기존 세션 반환, **없으면 null 반환**
+
+---
+
+## HTTP 요청 데이터
+HTTP 요청 메시지를 통해 클라이언트에서 서버로 데이터를 전달하는 방법을 알아보자.
+**주로 다음 3가지 방법을 사용한다.**
+1. **GET - 쿼리 파라미터**
+* /url**?username=hello&age=20**
+* 메시지 바디 없이 URL의 쿼리 파라미터에 데이터를 포함해서 전달
+* ex) 검색, 필터, 페이징등에서 많이 사용하는 방식
+
+2. **POST - HTML Form**
+* content-type: application/x-www-form-urlencoded
+* 메시지 바디에 쿼리 파리미터 형식으로 전달 (username=hello&age=20)
+* ex) 회원 가입, 상품 주문, HTML Form 사용
+
+3. **HTTP message body**에 데이터를 직접 담아서 요청
+* HTTP API에서 주로 사용 (JSON, XML, TEXT)
+* 데이터 형식은 주로 JSON 사용
+* POST, PUT, PATCH 사용 가능
