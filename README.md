@@ -228,3 +228,49 @@ private ObjectMapper objectMapper = new ObjectMapper(); // JSON 결과를 파싱
   response.sendRedirect("/basic/hello-form.html");
   ```
 
+---
+
+## MVC 패턴
+하나의 서블릿이나 JSP로 처리하던 것을 `Controller`와 `View`라는 영역으로 서로의 역할을 나눈 패턴이다.
+
+* Model : View에 출력할 데이터를 담아둔다.
+* View : Model에 담겨있는 데이터를 사용해서 화면을 그린다. (HTML 생성)
+* Controller : HTTP 요청을 받아서 파라미터를 검증하고 비즈니스 로직을 실행한다.
+  * Service : 일반적으로 비즈니스 로직은 Service라는 별도의 계층을 만들어 처리
+
+### Controller의 단점
+공통 처리가 어렵다.
+
+예를 들어 View로 이동하는 코드가 항상 중복 호출된다. 기능이 복잡해질 수록 이런 부분이 더 많아질 것이다.
+
+이를 해결하기 위해 나온 것이 바로 `FrontController 패턴`이라는 것이다!
+
+### FrontController 패턴
+하나의 서블릿이다.
+
+클라이언트의 요청을 받고 FrontController가 요청에 맞는 Controller를 찾아서 호출한다.
+
+이로 인해 공통 처리가 가능해졌다. 나머지 컨트롤러는 서블릿을 사용하지 않아도 된다.
+
+**스프링 웹 MVC와 FrontController**
+* 스프링 웹 MVC의 핵심이 바로 **FrontController**
+* 스프링 웹 MVC의 **DispatcherServlet**이 FrontController 패턴으로 구현되어 있음
+
+---
+
+## 스프링 MVC
+스프링 MVC의 `FrontController`가 `DispatcherServlet`이다.
+
+### 동작 순서
+![img.png](src/main/resources/static/springMvcStructure.png)
+1. **핸들러 조회**: 핸들러 매핑을 통해 요청 URL에 매핑된 핸들러(컨트롤러)를 조회한다.
+2. **핸들러 어댑터 조회**: 핸들러를 실행할 수 있는 핸들러 어댑터를 조회한다.
+3. **핸들러 어댑터 실행**: 핸들러 어댑터를 실행한다.
+4. **핸들러 실행**: 핸들러 어댑터가 실제 핸들러를 실행한다.
+5. **ModelAndView 반환**: 핸들러 어댑터는 핸들러가 반환하는 정보를 ModelAndView로 **변환**해서 반환한다.
+6. **viewResolver 호출**: 뷰 리졸버를 찾고 실행한다. 
+   * JSP의 경우: `InternalResourceViewResolver` 가 자동 등록되고, 사용된다.
+7. **View 반환**: 뷰 리졸버는 뷰의 논리 이름을 물리 이름으로 바꾸고, 렌더링 역할을 담당하는 뷰 객체를 반환한다.
+  * JSP의 경우 `InternalResourceView(JstlView)` 를 반환하는데, 내부에 `forward()` 로직이 있다.
+8. **뷰 렌더링**: 뷰를 통해서 뷰를 렌더링 한다.
+
